@@ -25,7 +25,6 @@ db.once('open', () => {
 
 // Get a random image in Unsplash.com
 async function seedImg() {
-  const id = process.env.UNSPLASH_ACCESS_KEY;
   try {
     const resp = await axios.get('https://api.unsplash.com/photos/random', {
       params: {
@@ -36,7 +35,7 @@ async function seedImg() {
     });
 
     // returns an array with 30 images (maximum allowed)
-    return resp.data.map((a) => a.urls.small);
+    return resp.data.map((a) => a.urls.regular);
   } catch (err) {
     console.error(err);
   }
