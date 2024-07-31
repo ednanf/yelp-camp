@@ -1,0 +1,15 @@
+# Ignore build outputs
+*.o
+*.obj
+
+# Ignore IDE files
+.idea/
+.vscode/
+
+# Ignore any environment configuration files
+*.env
+node_modules/
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

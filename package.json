@@ -1,0 +1,26 @@
+{
+  "name": "yelp-camp",
+  "version": "1.0.0",
+  "description": "Project to learn NodeJS and ExpressJS",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "expressjs"
+  ],
+  "author": "Ednan R. Frizzera Filho",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.5",
+    "ejs-mate": "^4.0.0",
+    "express": "^4.17.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.10.4",
+    "morgan": "^1.10.0"
+  }
+}
