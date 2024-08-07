@@ -4,6 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
+const session = require('express-session');
+const dotenv = require('dotenv');
 
 const ExpressError = require('./utils/ExpressError');
 
@@ -33,8 +35,22 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Setup
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+dotenv.config();
+
+const sessionConfig = {
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+app.use(session(sessionConfig));
 
 // Routes
 app.get('/', (req, res) => {
