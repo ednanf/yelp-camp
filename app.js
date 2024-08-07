@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const flash = require('connect-flash');
 const dotenv = require('dotenv');
 
 const ExpressError = require('./utils/ExpressError');
@@ -51,6 +52,15 @@ const sessionConfig = {
   },
 };
 app.use(session(sessionConfig));
+
+app.use(flash());
+
+// Middlewares
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 // Routes
 app.get('/', (req, res) => {
