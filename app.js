@@ -92,8 +92,14 @@ app.delete(
   }),
 );
 
+app.all('*', (req, res, next) => {
+  next(new ExpressError(404, 'Page not found!'));
+});
+
 app.use((err, req, res, next) => {
-  res.send('Oh boy, something went wrong!');
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = 'Oh no! Something went wrong!';
+  res.status(statusCode).render('error', { err });
 });
 
 // Server start
