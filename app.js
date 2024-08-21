@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const methodOverried = require('method-override');
 const ejsMate = require('ejs-mate');
 
+const { campgroundSchema } = require('./schemas.js');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 
@@ -29,6 +30,16 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverried('_method'));
+
+const validateCampground = (req, res, next) => {
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(',');
+    throw new ExpressError(400, msg);
+  } else {
+    next();
+  }
+};
 
 // Routes
 app.get('/', (req, res) => {
@@ -57,6 +68,7 @@ app.get(
 
 app.post(
   '/campgrounds',
+  validateCampground,
   catchAsync(async (req, res) => {
     const campground = new Campground(req.body.campground);
     await campground.save();
@@ -74,6 +86,7 @@ app.get(
 
 app.put(
   '/campgrounds/:id',
+  validateCampground,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, {
