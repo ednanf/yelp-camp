@@ -1,8 +1,10 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const methodOverried = require('method-override');
 const ejsMate = require('ejs-mate');
+const dotenv = require('dotenv');
 
 const ExpressError = require('./utils/ExpressError');
 
@@ -10,11 +12,13 @@ const campgroundsRoutes = require('./routes/campgrounds.js');
 const reviewRoutes = require('./routes/reviews.js');
 
 const app = express();
-const URI =
-  'mongodb://127.0.0.1:27017/yelp-camp?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.15';
+dotenv.config();
 
 // Mongoose connection
+const URI = process.env.DB_URI;
+
 mongoose.connect(URI);
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
@@ -27,6 +31,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Middleware
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverried('_method'));
 
@@ -35,7 +40,6 @@ app.get('/', (req, res) => {
   res.render('home');
 });
 
-// Campground routes
 app.use('/campgrounds', campgroundsRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
 
