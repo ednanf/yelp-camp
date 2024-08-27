@@ -35,6 +35,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverried('_method'));
 
+const sessionConfig = {
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24,
+    maxAge: Date.now() + 1000 * 60 * 60 * 24,
+  },
+};
+app.use(session(sessionConfig));
+
 // Routes
 app.get('/', (req, res) => {
   res.render('home');
