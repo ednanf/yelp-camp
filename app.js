@@ -5,6 +5,7 @@ const session = require('express-session');
 const methodOverried = require('method-override');
 const ejsMate = require('ejs-mate');
 const dotenv = require('dotenv');
+const flash = require('connect-flash');
 
 const ExpressError = require('./utils/ExpressError');
 
@@ -46,6 +47,15 @@ const sessionConfig = {
   },
 };
 app.use(session(sessionConfig));
+
+app.use(flash());
+
+// Custom middleware to make flash message contents available in all templates
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 // Routes
 app.get('/', (req, res) => {
