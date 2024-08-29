@@ -6,8 +6,12 @@ const methodOverried = require('method-override');
 const ejsMate = require('ejs-mate');
 const dotenv = require('dotenv');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
 const ExpressError = require('./utils/ExpressError');
+
+const User = require('./models/user.js');
 
 const campgroundsRoutes = require('./routes/campgrounds.js');
 const reviewRoutes = require('./routes/reviews.js');
@@ -35,6 +39,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverried('_method'));
+app.use(flash());
 
 const sessionConfig = {
   secret: process.env.SESSION_SECRET,
@@ -48,7 +53,12 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 
-app.use(flash());
+// Passport middleware (must come *after* express-session)
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Custom middleware to make flash message contents available in all templates
 app.use((req, res, next) => {
