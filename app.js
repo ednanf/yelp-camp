@@ -13,8 +13,9 @@ const ExpressError = require('./utils/ExpressError');
 
 const User = require('./models/user.js');
 
-const campgroundsRoutes = require('./routes/campgrounds.js');
+const campgroundRoutes = require('./routes/campgrounds.js');
 const reviewRoutes = require('./routes/reviews.js');
+const userRoutes = require('./routes/users.js');
 
 const app = express();
 dotenv.config();
@@ -68,12 +69,13 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use('/', userRoutes);
+app.use('/campgrounds', campgroundRoutes);
+app.use('/campgrounds/:id/reviews', reviewRoutes);
+
 app.get('/', (req, res) => {
   res.render('home');
 });
-
-app.use('/campgrounds', campgroundsRoutes);
-app.use('/campgrounds/:id/reviews', reviewRoutes);
 
 // Error handling
 app.all('*', (req, res, next) => {
