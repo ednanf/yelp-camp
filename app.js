@@ -61,8 +61,10 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Custom middleware to make flash message contents available in all templates
+// Custom middleware to make flash message contents available in all templates and more
 app.use((req, res, next) => {
+  // res.locals gives global access
+  res.locals.currentUser = req.user;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
