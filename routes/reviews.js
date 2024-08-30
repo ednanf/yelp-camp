@@ -3,23 +3,11 @@ const express = require('express');
 // mergeParams will allow params from the app.js to be passed to the routes in this file
 const router = express.Router({ mergeParams: true });
 
-const { reviewSchema } = require('../schemas.js');
-
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
+const { validateReview } = require('../middleware.js');
 
 const Campground = require('../models/campground.js');
 const Review = require('../models/review.js');
-
-const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(',');
-    throw new ExpressError(400, msg);
-  } else {
-    next();
-  }
-};
 
 router.post(
   '/',
