@@ -5,8 +5,6 @@ const { isLoggedIn, isAuthor, validateCampground } = require('../middleware.js')
 
 const catchAsync = require('../utils/catchAsync');
 
-const Campground = require('../models/campground');
-
 const campgroundControllers = require('../controllers/campgrounds');
 
 router.get('/', catchAsync(campgroundControllers.index));
