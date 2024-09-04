@@ -1,10 +1,13 @@
+if (process.env.NODE_ENV !== 'production') {
+  const dotenv = require('dotenv').config();
+}
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const methodOverried = require('method-override');
 const ejsMate = require('ejs-mate');
-const dotenv = require('dotenv');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -18,7 +21,6 @@ const reviewRoutes = require('./routes/reviews.js');
 const userRoutes = require('./routes/users.js');
 
 const app = express();
-dotenv.config();
 
 // Mongoose connection
 const URI = process.env.DB_URI;
