@@ -3,7 +3,8 @@ const router = express.Router();
 
 // File upload middleware
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const { storage } = require('../cloudinary/index.js');
+const upload = multer({ storage });
 
 const { isLoggedIn, isAuthor, validateCampground } = require('../middleware.js');
 
